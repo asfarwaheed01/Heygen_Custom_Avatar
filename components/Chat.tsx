@@ -301,7 +301,8 @@ const Chat: React.FC = () => {
   }
 
   const handleSendMessage = async () => {
-    if (inputText.trim()) {
+    if (inputText.trim() || audioBlob) {
+      // Check if there's either text or audio
       const newMessage: Message = {
         id: Date.now(),
         text: inputText,
@@ -310,12 +311,19 @@ const Chat: React.FC = () => {
       setMessages([...messages, newMessage]);
 
       try {
+        // Convert audioBlob to ArrayBuffer if it exists
+        let audioData = null;
+        if (audioBlob) {
+          const arrayBuffer = await audioBlob.arrayBuffer();
+          audioData = new Uint8Array(arrayBuffer); // Convert to Uint8Array for sending
+        }
+
         const response = await axios.post(
           "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
           {
-            user_query: inputText.trim(),
-            user_audio: null,
-            user_id: "123",
+            user_query: inputText.trim() || null, // Send input text if available
+            user_audio: audioData, // Send audio data
+            user_id: "123", // Example user ID
           }
         );
 
@@ -344,6 +352,7 @@ const Chat: React.FC = () => {
       }
 
       setInputText("");
+      setAudioBlob(null);
     }
   };
 
@@ -431,7 +440,7 @@ const Chat: React.FC = () => {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-            className="flex-1 md:text-[20px] text-[10px] bg-gray-200 rounded-full md:px-4 px-2 md:py-2 focus:outline-none"
+            className="flex-1 md:text-[20px] text-[15px] bg-gray-200 rounded-full md:px-4 px-2 md:py-2 focus:outline-none"
             placeholder="Type your message..."
           />
           <button
