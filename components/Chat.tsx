@@ -217,7 +217,7 @@
 // export default Chat;
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { Mic, Send, StopCircle } from "lucide-react";
+import { Mic, StopCircle } from "lucide-react";
 import { FaArrowUp } from "react-icons/fa6";
 import StreamingAvatar, {
   AvatarQuality,
@@ -240,6 +240,7 @@ const Chat: React.FC = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  console.log(audioBlob);
 
   // Avatar states
   const [isLoadingSession, setIsLoadingSession] = useState(false);
