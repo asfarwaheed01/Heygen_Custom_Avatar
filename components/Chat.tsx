@@ -263,9 +263,12 @@ const Chat: React.FC = () => {
 
   async function fetchAccessToken() {
     try {
-      const response = await fetch("/api/get-access-token", {
-        method: "POST",
-      });
+      const response = await fetch(
+        `${process.env.API_URL}api/get-access-token`,
+        {
+          method: "POST",
+        }
+      );
       return await response.text();
     } catch (error) {
       console.error("Error fetching access token:", error);
