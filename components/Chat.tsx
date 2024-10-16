@@ -1,6 +1,6 @@
 // "use client";
 // import React, { useState, useRef, useEffect } from "react";
-// import { Mic, Send, StopCircle } from "lucide-react";
+// import { Mic, StopCircle } from "lucide-react";
 // import { FaArrowUp } from "react-icons/fa6";
 // import StreamingAvatar, {
 //   AvatarQuality,
@@ -8,6 +8,7 @@
 //   TaskType,
 //   VoiceEmotion,
 // } from "@heygen/streaming-avatar";
+// import axios from "axios";
 
 // interface Message {
 //   id: number;
@@ -22,6 +23,7 @@
 //   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 //   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 //   const messagesEndRef = useRef<HTMLDivElement>(null);
+//   const [responseLoading, setResponseLoading] = useState(false);
 
 //   // Avatar states
 //   const [isLoadingSession, setIsLoadingSession] = useState(false);
@@ -44,7 +46,7 @@
 
 //   async function fetchAccessToken() {
 //     try {
-//       const response = await fetch("/api/get-access-token", {
+//       const response = await fetch(`/api/get-access-token`, {
 //         method: "POST",
 //       });
 //       return await response.text();
@@ -67,7 +69,7 @@
 
 //     try {
 //       await avatar.current.createStartAvatar({
-//         avatarName: "josh_lite3_20230714",
+//         avatarName: "Tyler-insuit-20220721",
 //         quality: AvatarQuality.Low,
 //         voice: {
 //           rate: 1.5,
@@ -82,37 +84,85 @@
 //   }
 
 //   const handleSendMessage = async () => {
-//     if (inputText.trim()) {
-//       const newMessage: Message = {
-//         id: Date.now(),
-//         text: inputText,
-//         isUser: true,
-//       };
-//       setMessages([...messages, newMessage]);
+//     setResponseLoading(true);
 
+//     try {
+//       const payload = {
+//         user_id: "123",
+//         user_query: inputText.trim() && !audioBlob ? inputText.trim() : "",
+//         user_audio: null as string | null,
+//       };
+//       if (audioBlob) {
+//         const byteArray = await convertBlobToBase64(audioBlob);
+//         payload.user_audio = byteArray;
+//         payload.user_query = "";
+//       }
+//       const response = await axios.post(
+//         "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
+//         payload,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       console.log("API Response:", response.data);
+//       const botResponse = response.data || "No response received";
+//       const botMessage: Message = {
+//         id: Date.now(),
+//         text: botResponse,
+//         isUser: false,
+//       };
+//       setMessages((prevMessages) => [...prevMessages, botMessage]);
 //       if (avatar.current) {
 //         try {
 //           await avatar.current.speak({
-//             text: inputText.trim(),
+//             text: botResponse,
 //             task_type: TaskType.REPEAT,
 //           });
 //         } catch (error) {
-//           console.error("Error sending message to avatar:", error);
+//           console.error("Error making the avatar speak:", error);
 //         }
 //       }
-
-//       setInputText("");
+//     } catch (error) {
+//       console.error("Error sending message to the API:", error);
 //     }
+//     setInputText("");
+//     setResponseLoading(false);
+//     setAudioBlob(null);
+//   };
+
+//   // Convert Blob to base64
+//   const convertBlobToBase64 = async (blob: Blob): Promise<string> => {
+//     const arrayBuffer = await blob.arrayBuffer();
+//     const byteArray = new Uint8Array(arrayBuffer);
+//     let binaryString = "";
+//     for (let i = 0; i < byteArray.length; i++) {
+//       binaryString += String.fromCharCode(byteArray[i]);
+//     }
+//     return btoa(binaryString);
 //   };
 
 //   const handleStartRecording = async () => {
 //     try {
 //       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-//       mediaRecorderRef.current = new MediaRecorder(stream);
-//       mediaRecorderRef.current.addEventListener("dataavailable", (event) => {
-//         setAudioBlob(event.data);
-//       });
-//       mediaRecorderRef.current.start();
+//       const mediaRecorder = new MediaRecorder(stream);
+//       mediaRecorderRef.current = mediaRecorder;
+
+//       const recordedChunks: Blob[] = [];
+//       mediaRecorder.ondataavailable = (event) => {
+//         if (event.data.size > 0) {
+//           recordedChunks.push(event.data);
+//         }
+//       };
+
+//       mediaRecorder.onstop = () => {
+//         const audioBlob = new Blob(recordedChunks, { type: "audio/webm" });
+//         setAudioBlob(audioBlob);
+//       };
+
+//       mediaRecorder.start();
 //       setIsRecording(true);
 //     } catch (error) {
 //       console.error("Error accessing microphone:", error);
@@ -120,16 +170,28 @@
 //   };
 
 //   const handleStopRecording = () => {
-//     if (mediaRecorderRef.current) {
+//     if (
+//       mediaRecorderRef.current &&
+//       mediaRecorderRef.current.state === "recording"
+//     ) {
 //       mediaRecorderRef.current.stop();
 //       setIsRecording(false);
 //     }
 //   };
 
+//   useEffect(() => {
+//     if (audioBlob) {
+//       handleSendMessage();
+//     }
+//   }, [audioBlob]);
+
 //   return (
 //     <div className="flex flex-col h-screen bg-gray-100">
+//       <h1 className="text-center text-2xl font-bold mt-[5%]">
+//         Health Coaching Assistant
+//       </h1>
 //       <div className="flex-1 flex items-center justify-center">
-//         <div className="w-[70%] mx-auto p-4">
+//         <div className="md:w-[70%] mx-auto p-4">
 //           {!stream ? (
 //             <div className="flex justify-center items-center h-full">
 //               <button
@@ -165,7 +227,7 @@
 //               </button>
 //             </div>
 //           ) : (
-//             <div className="w-full h-[500px] flex justify-center items-center">
+//             <div className="w-full md:h-[500px] h-[300px] flex justify-center items-center">
 //               <video
 //                 ref={mediaStream}
 //                 autoPlay
@@ -189,17 +251,19 @@
 //             value={inputText}
 //             onChange={(e) => setInputText(e.target.value)}
 //             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-//             className="flex-1 text-[20px] bg-gray-200 rounded-full px-4 py-2 focus:outline-none"
+//             className="flex-1 md:text-[20px] text-[15px] bg-gray-200 rounded-full md:px-4 px-2 md:py-2 focus:outline-none"
 //             placeholder="Type your message..."
 //           />
 //           <button
 //             onClick={handleSendMessage}
+//             disabled={responseLoading}
 //             className="bg-black text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //           >
 //             <FaArrowUp size={20} />
 //           </button>
 //           <button
 //             onClick={isRecording ? handleStopRecording : handleStartRecording}
+//             disabled={responseLoading}
 //             className={`${
 //               isRecording
 //                 ? "bg-red-500 hover:bg-red-600"
@@ -215,6 +279,7 @@
 // };
 
 // export default Chat;
+
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { Mic, StopCircle } from "lucide-react";
@@ -238,9 +303,9 @@ const Chat: React.FC = () => {
   const [inputText, setInputText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaRecorderRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  console.log(audioBlob);
+  const [responseLoading, setResponseLoading] = useState(false);
 
   // Avatar states
   const [isLoadingSession, setIsLoadingSession] = useState(false);
@@ -263,12 +328,9 @@ const Chat: React.FC = () => {
 
   async function fetchAccessToken() {
     try {
-      const response = await fetch(
-        `${process.env.API_URL}api/get-access-token`,
-        {
-          method: "POST",
-        }
-      );
+      const response = await fetch(`/api/get-access-token`, {
+        method: "POST",
+      });
       return await response.text();
     } catch (error) {
       console.error("Error fetching access token:", error);
@@ -290,7 +352,7 @@ const Chat: React.FC = () => {
     try {
       await avatar.current.createStartAvatar({
         avatarName: "josh_lite3_20230714",
-        quality: AvatarQuality.Low,
+        quality: AvatarQuality.High,
         voice: {
           rate: 1.5,
           emotion: VoiceEmotion.EXCITED,
@@ -303,71 +365,108 @@ const Chat: React.FC = () => {
     }
   }
 
-  const handleSendMessage = async () => {
-    if (inputText.trim() || audioBlob) {
-      // Check if there's either text or audio
-      const newMessage: Message = {
-        id: Date.now(),
-        text: inputText,
-        isUser: true,
+  const handleSendMessage = async (transcript?: string) => {
+    setResponseLoading(true);
+
+    try {
+      const payload = {
+        user_id: "123",
+        user_query: transcript || inputText.trim(),
       };
-      setMessages([...messages, newMessage]);
 
-      try {
-        // Convert audioBlob to ArrayBuffer if it exists
-        let audioData = null;
-        if (audioBlob) {
-          const arrayBuffer = await audioBlob.arrayBuffer();
-          audioData = new Uint8Array(arrayBuffer); // Convert to Uint8Array for sending
+      const response = await axios.post(
+        "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
+      );
 
-        const response = await axios.post(
-          "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
-          {
-            user_query: inputText.trim() || null, // Send input text if available
-            user_audio: audioData, // Send audio data
-            user_id: "123", // Example user ID
-          }
-        );
-
-        console.log("API Response:", response.data);
-        const botResponse = response.data || "No response received";
-
-        const botMessage: Message = {
-          id: Date.now(),
-          text: botResponse,
-          isUser: false,
-        };
-        setMessages((prevMessages) => [...prevMessages, botMessage]);
-
-        if (avatar.current) {
-          try {
-            await avatar.current.speak({
-              text: botResponse,
-              task_type: TaskType.REPEAT,
-            });
-          } catch (error) {
-            console.error("Error making the avatar speak:", error);
-          }
+      console.log("API Response:", response.data);
+      const botResponse = response.data || "No response received";
+      const botMessage: Message = {
+        id: Date.now(),
+        text: botResponse,
+        isUser: false,
+      };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+      if (avatar.current) {
+        try {
+          await avatar.current.speak({
+            text: botResponse,
+            task_type: TaskType.REPEAT,
+          });
+        } catch (error) {
+          console.error("Error making the avatar speak:", error);
         }
-      } catch (error) {
-        console.error("Error sending message to the API:", error);
       }
+    } catch (error) {
+      console.error("Error sending message to the API:", error);
+    }
 
-      setInputText("");
-      setAudioBlob(null);
+    setInputText("");
+    setResponseLoading(false);
+    setAudioBlob(null);
+  };
+
+  const handleAudioUpload = async (blob: Blob) => {
+    const formData = new FormData();
+    formData.append("file", blob, "recording.wav");
+
+    try {
+      const response = await axios.post(
+        "https://npdmpimj2i.us-east-1.awsapprunner.com/api/upload_audio",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const transcript = response.data.transcript;
+      console.log("Transcript:", transcript);
+      handleSendMessage(transcript);
+    } catch (error) {
+      console.error("Error uploading audio:", error);
     }
   };
 
   const handleStartRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      mediaRecorderRef.current.addEventListener("dataavailable", (event) => {
-        setAudioBlob(event.data);
-      });
-      mediaRecorderRef.current.start();
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      const processor = audioContext.createScriptProcessor(1024, 1, 1);
+
+      const chunks: Float32Array[] = [];
+
+      processor.onaudioprocess = (e) => {
+        const inputData = e.inputBuffer.getChannelData(0);
+        chunks.push(new Float32Array(inputData));
+      };
+
+      source.connect(processor);
+      processor.connect(audioContext.destination);
+
       setIsRecording(true);
+
+      mediaRecorderRef.current = {
+        stop: () => {
+          source.disconnect();
+          processor.disconnect();
+          const audioData = concatenateAudioBuffers(
+            chunks,
+            audioContext.sampleRate
+          );
+          const wavBlob = createWavFile(audioData, audioContext.sampleRate);
+          setAudioBlob(wavBlob);
+          handleAudioUpload(wavBlob);
+          setIsRecording(false);
+        },
+      };
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
@@ -376,12 +475,70 @@ const Chat: React.FC = () => {
   const handleStopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      setIsRecording(false);
+    }
+  };
+
+  const concatenateAudioBuffers = (
+    buffers: Float32Array[],
+    sampleRate: number
+  ): Float32Array => {
+    const totalLength = buffers.reduce((acc, buffer) => acc + buffer.length, 0);
+    const result = new Float32Array(totalLength);
+    let offset = 0;
+    for (const buffer of buffers) {
+      result.set(buffer, offset);
+      offset += buffer.length;
+    }
+    return result;
+  };
+
+  const createWavFile = (audioData: Float32Array, sampleRate: number): Blob => {
+    const buffer = new ArrayBuffer(44 + audioData.length * 2);
+    const view = new DataView(buffer);
+
+    // Write WAV header
+    writeString(view, 0, "RIFF");
+    view.setUint32(4, 36 + audioData.length * 2, true);
+    writeString(view, 8, "WAVE");
+    writeString(view, 12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, "data");
+    view.setUint32(40, audioData.length * 2, true);
+
+    // Write audio data
+    floatTo16BitPCM(view, 44, audioData);
+
+    return new Blob([buffer], { type: "audio/wav" });
+  };
+
+  const writeString = (view: DataView, offset: number, string: string) => {
+    for (let i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
+
+  const floatTo16BitPCM = (
+    output: DataView,
+    offset: number,
+    input: Float32Array
+  ) => {
+    for (let i = 0; i < input.length; i++, offset += 2) {
+      const s = Math.max(-1, Math.min(1, input[i]));
+      output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
     }
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
+      <h1 className="text-center text-2xl font-bold mt-[2%]">
+        Health Coaching Assistant
+      </h1>
       <div className="flex-1 flex items-center justify-center">
         <div className="md:w-[70%] mx-auto p-4">
           {!stream ? (
@@ -447,13 +604,15 @@ const Chat: React.FC = () => {
             placeholder="Type your message..."
           />
           <button
-            onClick={handleSendMessage}
+            onClick={() => handleSendMessage()}
+            disabled={responseLoading}
             className="bg-black text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <FaArrowUp size={20} />
           </button>
           <button
             onClick={isRecording ? handleStopRecording : handleStartRecording}
+            disabled={responseLoading}
             className={`${
               isRecording
                 ? "bg-red-500 hover:bg-red-600"
