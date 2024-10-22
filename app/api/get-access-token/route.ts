@@ -20,7 +20,7 @@ export async function POST() {
     return new Response(data.data.token, {
       status: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Origin': 'https://main.dal9auz5q4mbe.amplifyapp.com/', 
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key',
       },
@@ -31,7 +31,7 @@ export async function POST() {
     return new Response("Failed to retrieve access token", {
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Origin': 'https://main.dal9auz5q4mbe.amplifyapp.com/', 
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key',
       },
