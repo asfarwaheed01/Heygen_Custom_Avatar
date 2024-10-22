@@ -19,12 +19,22 @@ export async function POST() {
 
     return new Response(data.data.token, {
       status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key',
+      },
     });
   } catch (error) {
     console.error("Error retrieving access token:", error);
 
     return new Response("Failed to retrieve access token", {
       status: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key',
+      },
     });
   }
 }
