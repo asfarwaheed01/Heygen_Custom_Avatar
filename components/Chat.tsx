@@ -98,7 +98,8 @@ const Chat: React.FC = () => {
       };
 
       const response = await axios.post(
-        "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
+        // "https://npdmpimj2i.us-east-1.awsapprunner.com/api/generate_response",
+        "http://54.144.30.10:5000/api/generate_response",
         payload,
         {
           headers: {
@@ -140,7 +141,8 @@ const Chat: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://npdmpimj2i.us-east-1.awsapprunner.com/api/upload_audio",
+        // "https://npdmpimj2i.us-east-1.awsapprunner.com/api/upload_audio",
+        "http://54.144.30.10:5000/api/upload_audio",
         formData,
         {
           headers: {
