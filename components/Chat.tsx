@@ -316,7 +316,7 @@ const Chat: React.FC = () => {
       {sessionStarted &&
       <div className="flex justify-end md:w-[70%] mx-auto mb-2">
       <button
-                  className="bg-gradient-to-tr lg:w-[10%]  from-indigo-500 to-indigo-300  text-white rounded-lg shadow-md px-2 py-2"
+                  className="bg-gradient-to-tr lg:w-[15%]  from-indigo-500 to-indigo-300  text-white rounded-lg shadow-md px-2 py-2"
                   onClick={endSession}
                 >
                   End session
