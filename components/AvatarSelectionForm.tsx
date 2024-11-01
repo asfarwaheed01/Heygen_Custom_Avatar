@@ -1,170 +1,4 @@
-// import { AVATARS } from "@/lib/constants";
-// import React, { useEffect, useState } from "react";
-
-// interface Avatar {
-//   id: string;
-//   name: string;
-//   region: string;
-// }
-
-// interface AvatarData {
-//   avatar_id: string;
-//   name: string;
-//   region: string;
-// }
-
-// interface AvatarSelectionFormProps {
-//   onSelectAvatar: (avatarId: string) => void;
-// }
-
-// const names = [
-//   { name: "Alice", gender: "female", region: "US" },
-//   { name: "Sonia", gender: "female", region: "US" },
-//   { name: "Lina", gender: "female", region: "EU" },
-//   { name: "Tina", gender: "female", region: "EU" },
-//   { name: "Lucas", gender: "male", region: "US" },
-//   { name: "Raj", gender: "male", region: "Asia" },
-//   { name: "Mei Lin", gender: "female", region: "Asia" },
-//   { name: "Kenji", gender: "male", region: "EU" },
-//   { name: "Zara", gender: "female", region: "Asia" },
-//   { name: "Carlos", gender: "male", region: "US" },
-//   { name: "Khalid", gender: "male", region: "Asia" },
-//   { name: "Sofia", gender: "female", region: "EU" },
-// ];
-
-// const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
-//   onSelectAvatar,
-// }) => {
-//   const [avatars, setAvatars] = useState<Avatar[]>([]);
-//   const [selectedRegion, setSelectedRegion] = useState<string>("");
-//   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
-//   const [loading, setLoading] = useState<boolean>(true);
-
-//   const regions = [
-//     { id: "us", name: "United States" },
-//     { id: "eu", name: "Europe" },
-//     { id: "asia", name: "Asia" },
-//   ];
-
-//   useEffect(() => {
-//     const fetchAvatars = async () => {
-//       setLoading(true);
-//       try {
-//         const response = await fetch(
-//           "https://api.heygen.com/v1/streaming/avatar.list",
-//           {
-//             method: "GET",
-//             headers: {
-//               accept: "application/json",
-//               "x-api-key": process.env.HEYGENAPIKEY || "",
-//             },
-//           }
-//         );
-
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-
-//         const data = await response.json();
-//         const apiAvatars =
-//           data?.data?.map((avatar: AvatarData, index: number) => ({
-//             id: avatar.avatar_id,
-//             name: names[index % names.length].name,
-//             region: names[index % names.length].region,
-//           })) || [];
-
-//         // Add predefined AVATARS with region and gender assignments
-//         const predefinedAvatars = AVATARS.map((avatar: any, index: number) => ({
-//           id: avatar.avatar_id,
-//           name: avatar.name,
-//           region: names[index % names.length].region,
-//           gender: names[index % names.length].gender,
-//         }));
-
-//         // Merge fetched avatars with predefined avatars
-//         const mergedAvatars = [...apiAvatars, ...predefinedAvatars];
-//         setAvatars(mergedAvatars);
-//       } catch (error) {
-//         console.error("Error fetching avatars:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchAvatars();
-//   }, []);
-
-//   const filteredAvatars = avatars.filter(
-//     (avatar) => !selectedRegion || avatar.region === selectedRegion
-//   );
-
-//   const handleRegionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     setSelectedRegion(event.target.value);
-//     setSelectedAvatar("");
-//   };
-
-//   const handleAvatarChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     setSelectedAvatar(event.target.value);
-//     onSelectAvatar(event.target.value);
-//   };
-
-//   if (loading) {
-//     return (
-//       <div className="w-full max-w-md mx-auto mb-6 p-6 bg-white rounded-lg shadow-md">
-//         <div className="space-y-4">
-//           <div className="h-8 bg-gray-300 rounded-md animate-pulse"></div>
-//           <div className="h-8 bg-gray-300 rounded-md animate-pulse"></div>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="w-full max-w-md mx-auto mb-6 p-6 bg-white rounded-lg shadow-md">
-//       <div className="space-y-4">
-//         <div className="space-y-2">
-//           <label className="block text-sm font-medium text-gray-700">
-//             Select Region
-//           </label>
-//           <select
-//             value={selectedRegion}
-//             onChange={handleRegionChange}
-//             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//           >
-//             <option value="">Select Region</option>
-//             {regions.map((region) => (
-//               <option key={region.id} value={region.id}>
-//                 {region.name}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="space-y-2">
-//           <label className="block text-sm font-medium text-gray-700">
-//             Select Avatar
-//           </label>
-//           <select
-//             value={selectedAvatar}
-//             onChange={handleAvatarChange}
-//             disabled={!filteredAvatars.length}
-//             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-//           >
-//             {filteredAvatars.map((avatar) => (
-//               <option key={avatar.id} value={avatar.id}>
-//                 {avatar.name}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AvatarSelectionForm;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Avatar {
   id: string;
@@ -189,14 +23,14 @@ export const AVATARS: Avatar[] = [
     name: "Edward in Blue Shirt",
     gender: "male",
     region: "US",
-    age: getRandomAge(),
+    age: "Old",
   },
   {
     id: "Tyler-incasualsuit-20220721",
     name: "Tyler in Casual Suit",
     gender: "male",
     region: "US",
-    age: getRandomAge(),
+    age: "Middle Age",
   },
   {
     id: "Anna_public_3_20240108",
@@ -271,7 +105,7 @@ export const AVATARS: Avatar[] = [
   {
     id: "3c8a703d9d764938ae522b43401a59c2",
     name: "Kenji",
-    gender: "male",
+    gender: "female",
     region: "EU",
     age: getRandomAge(),
   },
@@ -284,8 +118,8 @@ export const AVATARS: Avatar[] = [
   },
   {
     id: "c20f4bdddbe041ecba98d93444f8b29b",
-    name: "Carlos",
-    gender: "male",
+    name: "Caroline",
+    gender: "female",
     region: "US",
     age: getRandomAge(),
   },
@@ -311,7 +145,8 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedAge, setSelectedAge] = useState<string>("");
-  const [selectedAvatar, setSelectedAvatar] = useState<string>("");
+  const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
+  console.log(selectedAvatar);
 
   const regions = [
     { id: "US", name: "United States" },
@@ -330,33 +165,25 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
     { id: "Old", name: "Old" },
   ];
 
-  // Filter avatars based on selected criteria
-  const filteredAvatars = AVATARS.filter(
-    (avatar) =>
-      (!selectedRegion || avatar.region === selectedRegion) &&
-      (!selectedGender || avatar.gender === selectedGender) &&
-      (!selectedAge || avatar.age === selectedAge)
-  );
+  useEffect(() => {
+    if (selectedRegion && selectedGender && selectedAge) {
+      const matchingAvatars = AVATARS.filter(
+        (avatar) =>
+          avatar.region === selectedRegion &&
+          avatar.gender === selectedGender &&
+          avatar.age === selectedAge
+      );
 
-  const handleRegionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRegion(event.target.value);
-    setSelectedAvatar("");
-  };
-
-  const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedGender(event.target.value);
-    setSelectedAvatar("");
-  };
-
-  const handleAgeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAge(event.target.value);
-    setSelectedAvatar("");
-  };
-
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAvatar(event.target.value);
-    onSelectAvatar(event.target.value);
-  };
+      if (matchingAvatars.length > 0) {
+        const chosenAvatar =
+          matchingAvatars[Math.floor(Math.random() * matchingAvatars.length)];
+        setSelectedAvatar(chosenAvatar);
+        onSelectAvatar(chosenAvatar.id);
+      } else {
+        setSelectedAvatar(null);
+      }
+    }
+  }, [selectedRegion, selectedGender, selectedAge, onSelectAvatar]);
 
   return (
     <div className="w-full max-w-md mx-auto mb-6 p-6 bg-white rounded-lg shadow-md">
@@ -367,7 +194,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
           </label>
           <select
             value={selectedRegion}
-            onChange={handleRegionChange}
+            onChange={(e) => setSelectedRegion(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Select Region</option>
@@ -385,7 +212,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
           </label>
           <select
             value={selectedGender}
-            onChange={handleGenderChange}
+            onChange={(e) => setSelectedGender(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Select Gender</option>
@@ -403,7 +230,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
           </label>
           <select
             value={selectedAge}
-            onChange={handleAgeChange}
+            onChange={(e) => setSelectedAge(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Select Age</option>
@@ -415,24 +242,14 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
           </select>
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Select Avatar
-          </label>
-          <select
-            value={selectedAvatar}
-            onChange={handleAvatarChange}
-            disabled={!filteredAvatars.length}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          >
-            <option value="">Select Avatar</option>
-            {filteredAvatars.map((avatar) => (
-              <option key={avatar.id} value={avatar.id}>
-                {avatar.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {selectedAvatar && (
+          <div className="mt-4 p-4 border rounded bg-blue-50">
+            <h3 className="text-lg font-medium text-gray-700">
+              Selected Avatar:
+            </h3>
+            <p>{selectedAvatar.name}</p>
+          </div>
+        )}
       </div>
     </div>
   );
