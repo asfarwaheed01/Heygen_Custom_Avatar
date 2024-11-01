@@ -146,7 +146,9 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedAge, setSelectedAge] = useState<string>("");
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
-  console.log(selectedAvatar);
+
+  // Determine if all filters are selected
+  const filtersSelected = selectedRegion && selectedGender && selectedAge;
 
   const regions = [
     { id: "US", name: "United States" },
@@ -166,7 +168,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   ];
 
   useEffect(() => {
-    if (selectedRegion && selectedGender && selectedAge) {
+    if (filtersSelected) {
       const matchingAvatars = AVATARS.filter(
         (avatar) =>
           avatar.region === selectedRegion &&
@@ -182,8 +184,17 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
       } else {
         setSelectedAvatar(null);
       }
+    } else {
+      // Reset avatar selection if not all filters are selected
+      setSelectedAvatar(null);
     }
-  }, [selectedRegion, selectedGender, selectedAge, onSelectAvatar]);
+  }, [
+    selectedRegion,
+    selectedGender,
+    selectedAge,
+    filtersSelected,
+    onSelectAvatar,
+  ]);
 
   return (
     <div className="w-full max-w-md mx-auto mb-6 p-6 bg-white rounded-lg shadow-md">
@@ -241,6 +252,18 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
             ))}
           </select>
         </div>
+
+        {filtersSelected && selectedAvatar === null && (
+          <div className="mt-4 p-4 border border-red-300 bg-red-50 rounded-lg flex items-center">
+            <span role="img" aria-label="search" className="mr-2 text-xl">
+              🔍
+            </span>
+            <span className="text-red-700 font-medium">
+              No avatars found matching your selection. Please adjust the
+              filters to find an avatar.
+            </span>
+          </div>
+        )}
 
         {/* {selectedAvatar && (
           <div className="mt-4 p-4 border rounded bg-blue-50">
