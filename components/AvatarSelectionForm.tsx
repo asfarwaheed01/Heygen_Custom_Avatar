@@ -22,7 +22,7 @@ export const AVATARS: Avatar[] = [
     id: "Eric_public_pro2_20230608",
     name: "Edward in Blue Shirt",
     gender: "male",
-    region: "US",
+    region: "EU",
     age: "Old",
   },
   {
