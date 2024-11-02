@@ -7,3 +7,12 @@ export interface Message {
 export  interface CustomMediaRecorder {
     stop: () => void;
 }
+
+
+export interface Avatar {
+  id: string;
+  name: string;
+  region: string;
+  gender: string;
+  age: string;
+}
