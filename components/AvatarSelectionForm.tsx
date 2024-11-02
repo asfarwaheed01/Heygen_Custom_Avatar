@@ -288,6 +288,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   const [selectedAge, setSelectedAge] = useState<string>("");
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
   const filtersSelected = selectedRegion && selectedGender && selectedAge;
+  console.log(selectedAvatar);
 
   const regions = [
     { id: "US", name: "United States" },
@@ -401,14 +402,14 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
           </select>
         </div>
 
-        {selectedAvatar && (
+        {/* {selectedAvatar && (
           <div className="mt-4 p-4 border rounded bg-blue-50">
             <h3 className="text-lg font-medium text-gray-700">
               Selected Avatar:
             </h3>
             <p>{selectedAvatar.name}</p>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
