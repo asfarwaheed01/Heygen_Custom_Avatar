@@ -279,7 +279,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">
-        <div className="md:w-[70%] mx-auto p-4">
+        <div className="md:w-[70%] mx-auto my-2">
           {!stream ? (
             <div className="flex flex-col justify-center items-center h-full">
               <AvatarSelectionForm onSelectAvatar={setSelectedAvatarId} />
@@ -316,7 +316,7 @@ const Chat: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="w-full h-[300px] flex justify-center items-center">
+            <div className="w-full h-[450px] flex justify-center items-center">
               <video
                 ref={mediaStream}
                 autoPlay
@@ -324,7 +324,7 @@ const Chat: React.FC = () => {
                 style={{
                   width: "100%",
                   height: "100%",
-                  objectFit: "contain",
+                  objectFit: "cover",
                 }}
               >
                 <track kind="captions" />

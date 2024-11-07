@@ -1,38 +1,38 @@
 import { Avatar } from "@/interfaces/Interfaces";
 
 export const AVATARS: Avatar[] = [
-  {
-    id: "Eric_public_pro2_20230608",
-    name: "Edward in Blue Shirt",
-    gender: "male",
-    ethnicity: "Caucasian",
-    age: "Old",
-  },
-  {
-    id: "Tyler-incasualsuit-20220721",
-    name: "Tyler in Casual Suit",
-    gender: "male",
-    ethnicity: "Caucasian",
-    age: "Middle Age",
-  },
-  {
-    id: "Anna_public_3_20240108",
-    name: "Anna in Brown T-shirt",
-    gender: "female",
-    ethnicity: "Caucasian",
-    age: "Young",
-  },
-  {
-    id: "Susan_public_2_20240328",
-    name: "Susan in Black Shirt",
-    gender: "female",
-    ethnicity: "Caucasian",
-    age: "Young",
-  },
+  // {
+  //   id: "Eric_public_pro2_20230608",
+  //   name: "Edward in Blue Shirt",
+  //   gender: "male",
+  //   ethnicity: "Caucasian",
+  //   age: "Old",
+  // },
+  // {
+  //   id: "Tyler-incasualsuit-20220721",
+  //   name: "Tyler in Casual Suit",
+  //   gender: "male",
+  //   ethnicity: "Caucasian",
+  //   age: "Middle Age",
+  // },
+  // {
+  //   id: "Anna_public_3_20240108",
+  //   name: "Anna in Brown T-shirt",
+  //   gender: "female",
+  //   ethnicity: "Caucasian",
+  //   age: "Young",
+  // },
+  // {
+  //   id: "Susan_public_2_20240328",
+  //   name: "Susan in Black Shirt",
+  //   gender: "female",
+  //   ethnicity: "Caucasian",
+  //   age: "Young",
+  // },
   {
     id: "josh_lite3_20230714",
     name: "Joshua Heygen CEO",
-    gender: "male",
+    gender: "non-binary",
     ethnicity: "Asian",
     age: "Young",
   },
