@@ -14,7 +14,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedAge, setSelectedAge] = useState<string>("");
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
-
+  console.log(selectedAvatar);
   const filtersSelected = selectedEthnicity && selectedGender && selectedAge;
 
   const ethnicities = [

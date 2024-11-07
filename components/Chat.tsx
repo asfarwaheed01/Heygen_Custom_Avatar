@@ -260,13 +260,13 @@ const Chat: React.FC = () => {
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
       <div className="md:flex items-center bg-gray-100 px-4 mt-4">
-        <div className="mb-4 md:absolute left-4 top-4">
+        <div className="mb-4 md:absolute left-4 top-4 cursor-pointer group">
           <Image
             width={150}
             height={150}
             src="/assets/avatar_logo.png"
             alt="avatar_logo"
-            className="rounded-full border-4 border-blue-500 shadow-lg"
+            className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
           />
         </div>
         <div className="flex-1 justify-center">
