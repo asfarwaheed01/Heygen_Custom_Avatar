@@ -12,7 +12,7 @@ export  interface CustomMediaRecorder {
 export interface Avatar {
   id: string;
   name: string;
-  region: string;
+  ethnicity: string;
   gender: string;
   age: string;
 }

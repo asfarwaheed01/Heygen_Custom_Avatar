@@ -11,6 +11,7 @@ import StreamingAvatar, {
 import axios from "axios";
 import { CustomMediaRecorder, Message } from "@/interfaces/Interfaces";
 import AvatarSelectionForm from "./AvatarSelectionForm";
+import Image from "next/image";
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -258,9 +259,25 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
-      <h1 className="text-center text-black text-2xl font-bold mt-[2%]">
-        Health Coaching Assistant
-      </h1>
+      <div className="md:flex items-center bg-gray-100 px-4 mt-4">
+        <div className="mb-4 md:absolute left-4 top-4">
+          <Image
+            width={150}
+            height={150}
+            src="/assets/avatar_logo.png"
+            alt="avatar_logo"
+            className="rounded-full border-4 border-blue-500 shadow-lg"
+          />
+        </div>
+        <div className="flex-1 justify-center">
+          <h1 className="text-center text-gray-800 md:text-3xl font-extrabold mt-4">
+            AI Therapist <span className="text-blue-500">(Beta)</span>
+          </h1>
+          <p className="text-center text-gray-600 text-sm mt-2">
+            Your personalized virtual therapy assistant
+          </p>
+        </div>
+      </div>
       <div className="flex-1 flex items-center justify-center">
         <div className="md:w-[70%] mx-auto p-4">
           {!stream ? (
