@@ -30,7 +30,14 @@ const Chat: React.FC = () => {
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatar | null>(null);
   const [selectedAvatarId, setSelectedAvatarId] = useState<string>("");
+  const introPlayedRef = useRef(false);
   const canStartSession = !!selectedAvatarId;
+
+  const introLines = [
+    "Hello! Welcome to your AI Therapy session.",
+    "I'm here to assist you with any concerns or questions you might have.",
+    "Feel free to type or speak, and I'll respond accordingly.",
+  ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,6 +51,21 @@ const Chat: React.FC = () => {
       };
     }
   }, [stream]);
+
+  async function speakIntroLines() {
+    for (const line of introLines) {
+      try {
+        if (avatar.current) {
+          await avatar.current.speak({
+            text: line,
+            task_type: TaskType.REPEAT,
+          });
+        }
+      } catch (error) {
+        console.error("Error making the avatar speak intro line:", error);
+      }
+    }
+  }
 
   async function fetchAccessToken() {
     try {
@@ -76,6 +98,10 @@ const Chat: React.FC = () => {
         },
       });
       setSessionStarted(true);
+      if (!introPlayedRef.current) {
+        introPlayedRef.current = true;
+        speakIntroLines();
+      }
     } catch (error) {
       console.error("Error starting avatar session:", error);
     } finally {
@@ -88,6 +114,7 @@ const Chat: React.FC = () => {
     setStream(undefined);
     setSessionStarted(false);
     setSelectedAvatarId("");
+    introPlayedRef.current = false;
   }
 
   const handleAudioUpload = async (blob: Blob) => {
@@ -259,18 +286,18 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
-      <div className="md:flex items-center bg-gray-100 px-4 mt-4">
-        <div className="mb-4 md:absolute left-4 top-4 cursor-pointer group">
+      <div className="md:flex items-center bg-gray-100 px-4 mt-2">
+        <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group">
           <Image
-            width={150}
-            height={150}
+            width={100}
+            height={100}
             src="/assets/avatar_logo.png"
             alt="avatar_logo"
             className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
           />
         </div>
         <div className="flex-1 justify-center">
-          <h1 className="text-center text-gray-800 md:text-3xl font-extrabold mt-4">
+          <h1 className="text-center text-gray-800 md:text-3xl font-extrabold">
             AI Therapist <span className="text-blue-500">(Beta)</span>
           </h1>
           <p className="text-center text-gray-600 text-sm mt-2">
@@ -279,7 +306,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">
-        <div className="md:w-[70%] mx-auto my-2">
+        <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-[80vh]">
           {!stream ? (
             <div className="flex flex-col justify-center items-center h-full">
               <AvatarSelectionForm onSelectAvatar={setSelectedAvatarId} />
@@ -311,12 +338,12 @@ const Chat: React.FC = () => {
                     Starting Session...
                   </div>
                 ) : (
-                  "Start Avatar Session"
+                  "Start Therapy Session"
                 )}
               </button>
             </div>
           ) : (
-            <div className="w-full h-[450px] flex justify-center items-center">
+            <div className="w-full h-full absolute top-[10vh] max-h-[90vh] flex justify-center items-center">
               <video
                 ref={mediaStream}
                 autoPlay
@@ -334,7 +361,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       {sessionStarted && selectedAvatarId && (
-        <div className="flex justify-end md:w-[70%] mx-auto mb-2">
+        <div className="flex justify-end md:w-[70%] mx-auto mb-2 z-10">
           <button
             className="bg-gradient-to-tr lg:w-[15%]  from-indigo-500 to-indigo-300  text-white rounded-lg shadow-md px-2 py-2"
             onClick={endSession}
@@ -343,7 +370,7 @@ const Chat: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200">
+      <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200 z-10">
         <div className="flex items-center space-x-2">
           <input
             type="text"
