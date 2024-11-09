@@ -98,7 +98,7 @@ const Chat: React.FC = () => {
       setSessionStarted(true);
       if (!introPlayedRef.current) {
         introPlayedRef.current = true;
-        setTimeout(speakIntroLines, 2000);
+        setTimeout(speakIntroLines, 3000);
       }
     } catch (error) {
       console.error("Error starting avatar session:", error);

@@ -132,7 +132,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
             ))}
           </select>
         </div>
-        {selectedAvatar && <h1>{selectedAvatar.name}</h1>}
+        {/* {selectedAvatar && <h1>{selectedAvatar.name}</h1>} */}
       </div>
     </div>
   );
