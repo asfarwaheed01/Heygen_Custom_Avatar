@@ -103,7 +103,7 @@ export const AVATARS: Avatar[] = [
     id: "c20f4bdddbe041ecba98d93444f8b29b",
     name: "Caroline",
     gender: "female",
-    ethnicity: "Hispanic",
+    ethnicity: "Caucasian",
     age: "Middle Age",
   },
   {

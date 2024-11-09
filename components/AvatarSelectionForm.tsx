@@ -22,7 +22,6 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
     { id: "Asian", name: "Asian" },
     { id: "Caucasian", name: "Caucasian" },
     { id: "Hispanic", name: "Hispanic" },
-    { id: "Other", name: "Other" },
   ];
 
   const genders = [
@@ -133,6 +132,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
             ))}
           </select>
         </div>
+        {selectedAvatar && <h1>{selectedAvatar.name}</h1>}
       </div>
     </div>
   );

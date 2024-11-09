@@ -34,9 +34,7 @@ const Chat: React.FC = () => {
   const canStartSession = !!selectedAvatarId;
 
   const introLines = [
-    "Hello! Welcome to your AI Therapy session.",
-    "I'm here to assist you with any concerns or questions you might have.",
-    "Feel free to type or speak, and I'll respond accordingly.",
+    "Hello, and welcome! I’m here to support you as an AI therapist, drawing on a range of clinical knowledge to offer guidance. I’d love to hear about what brings you here today. You can share as much or as little as feels comfortable for you, and we’ll go at your own pace",
   ];
 
   useEffect(() => {
@@ -100,7 +98,7 @@ const Chat: React.FC = () => {
       setSessionStarted(true);
       if (!introPlayedRef.current) {
         introPlayedRef.current = true;
-        speakIntroLines();
+        setTimeout(speakIntroLines, 2000);
       }
     } catch (error) {
       console.error("Error starting avatar session:", error);
@@ -286,27 +284,29 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
-      <div className="md:flex items-center bg-gray-100 px-4 mt-2">
-        <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group">
-          <Image
-            width={100}
-            height={100}
-            src="/assets/avatar_logo.png"
-            alt="avatar_logo"
-            className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
-          />
+      {!sessionStarted && (
+        <div className="md:flex items-center bg-gray-100 px-4 mt-2">
+          <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group">
+            <Image
+              width={150}
+              height={150}
+              src="/assets/avatar_logo.png"
+              alt="avatar_logo"
+              className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
+            />
+          </div>
+          <div className="flex-1 justify-center">
+            <h1 className="text-center text-gray-800 md:text-3xl font-extrabold">
+              AI Therapist <span className="text-blue-500">(Beta)</span>
+            </h1>
+            <p className="text-center text-gray-600 text-sm mt-2">
+              Your personalized virtual therapist
+            </p>
+          </div>
         </div>
-        <div className="flex-1 justify-center">
-          <h1 className="text-center text-gray-800 md:text-3xl font-extrabold">
-            AI Therapist <span className="text-blue-500">(Beta)</span>
-          </h1>
-          <p className="text-center text-gray-600 text-sm mt-2">
-            Your personalized virtual therapy assistant
-          </p>
-        </div>
-      </div>
+      )}
       <div className="flex-1 flex items-center justify-center">
-        <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-[80vh]">
+        <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-screen">
           {!stream ? (
             <div className="flex flex-col justify-center items-center h-full">
               <AvatarSelectionForm onSelectAvatar={setSelectedAvatarId} />
@@ -343,15 +343,19 @@ const Chat: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="w-full h-full absolute top-[10vh] max-h-[90vh] flex justify-center items-center">
+            <div className="w-screen h-screen absolute top-0 max-h-screen flex justify-center items-center">
               <video
                 ref={mediaStream}
                 autoPlay
                 playsInline
                 style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
+                  objectPosition: "center top",
                 }}
               >
                 <track kind="captions" />
