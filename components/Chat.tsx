@@ -116,23 +116,24 @@ const Chat: React.FC = () => {
   }
 
   const handleAudioUpload = async (blob: Blob) => {
-    const formData = new FormData();
-    formData.append("file", blob, "recording.wav");
+    // const formData = new FormData();
+    // formData.append("file", blob, "recording.wav");
 
     try {
-      const response = await axios.post(
-        "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/upload_audio",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/upload_audio",
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
-      const transcript = response.data.transcript;
-      console.log("Transcript:", transcript);
-      handleSendMessage(transcript);
+      // const transcript = response.data.transcript;
+      // console.log("Transcript:", transcript);
+      // handleSendMessage(transcript);
+      handleSendWavFile(blob);
     } catch (error) {
       console.error("Error uploading audio:", error);
     }
@@ -223,6 +224,62 @@ const Chat: React.FC = () => {
     }
   };
 
+  // const handleSendWavFile = async (blob: Blob) => {
+  //   if (!blob) {
+  //     console.error("No audio blob available to send.");
+  //     return;
+  //   }
+
+  //   const file = new FormData();
+  //   file.append("file", blob, "recording.wav");
+
+  //   try {
+  //     const response = await axios.post(
+  //       "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/generate_audio_response",
+  //       file,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+
+  //     console.log("Response from server:", response.data);
+  //     const transcript = response.data;
+  //     handleSendMessage(transcript);
+  //   } catch (error) {
+  //     console.error("Error sending WAV file:", error);
+  //   }
+  // };
+  const handleSendWavFile = async (blob: Blob) => {
+    if (!blob) {
+      console.error("No audio blob available to send.");
+      return;
+    }
+
+    const file = new FormData();
+    file.append("file", blob, "recording.wav");
+
+    try {
+      const response = await axios.post(
+        "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/generate_audio_response",
+        file,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const transcript = response.data;
+
+      console.log("Transcript:", transcript);
+      handleSendMessage(transcript);
+    } catch (error) {
+      console.error("Error sending WAV file:", error);
+    }
+  };
+
   const handleStopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
@@ -284,17 +341,17 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
-      {!sessionStarted && (
-        <div className="md:flex items-center bg-gray-100 px-4 mt-2">
-          <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group">
-            <Image
-              width={150}
-              height={150}
-              src="/assets/avatar_logo.png"
-              alt="avatar_logo"
-              className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
-            />
-          </div>
+      <div className="md:flex items-center bg-gray-100 px-4 mt-2">
+        <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group z-10">
+          <Image
+            width={150}
+            height={150}
+            src="/assets/avatar_logo.png"
+            alt="avatar_logo"
+            className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
+          />
+        </div>
+        {!sessionStarted && (
           <div className="flex-1 justify-center">
             <h1 className="text-center text-gray-800 md:text-3xl font-extrabold">
               AI Therapist <span className="text-blue-500">(Beta)</span>
@@ -303,8 +360,8 @@ const Chat: React.FC = () => {
               Your personalized virtual therapist
             </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <div className="flex-1 flex items-center justify-center">
         <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-screen">
           {!stream ? (
