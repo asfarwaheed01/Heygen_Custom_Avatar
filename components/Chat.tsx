@@ -223,34 +223,6 @@ const Chat: React.FC = () => {
       console.error("Error accessing microphone:", error);
     }
   };
-
-  // const handleSendWavFile = async (blob: Blob) => {
-  //   if (!blob) {
-  //     console.error("No audio blob available to send.");
-  //     return;
-  //   }
-
-  //   const file = new FormData();
-  //   file.append("file", blob, "recording.wav");
-
-  //   try {
-  //     const response = await axios.post(
-  //       "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/generate_audio_response",
-  //       file,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Response from server:", response.data);
-  //     const transcript = response.data;
-  //     handleSendMessage(transcript);
-  //   } catch (error) {
-  //     console.error("Error sending WAV file:", error);
-  //   }
-  // };
   const handleSendWavFile = async (blob: Blob) => {
     if (!blob) {
       console.error("No audio blob available to send.");
@@ -271,10 +243,24 @@ const Chat: React.FC = () => {
         }
       );
 
-      const transcript = response.data;
+      const botResponse = response.data || "No response received";
+      const botMessage: Message = {
+        id: Date.now(),
+        text: botResponse,
+        isUser: false,
+      };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
 
-      console.log("Transcript:", transcript);
-      handleSendMessage(transcript);
+      if (avatar.current) {
+        try {
+          await avatar.current.speak({
+            text: botResponse,
+            task_type: TaskType.REPEAT,
+          });
+        } catch (error) {
+          console.error("Error making the avatar speak:", error);
+        }
+      }
     } catch (error) {
       console.error("Error sending WAV file:", error);
     }
@@ -342,7 +328,7 @@ const Chat: React.FC = () => {
   return (
     <div className="flex flex-col h-auto min-h-screen bg-gray-100">
       <div className="md:flex items-center bg-gray-100 px-4 mt-2">
-        <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group z-10">
+        <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group z-20">
           <Image
             width={150}
             height={150}
