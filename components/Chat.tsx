@@ -34,7 +34,7 @@ const Chat: React.FC = () => {
   const canStartSession = !!selectedAvatarId;
 
   const introLines = [
-    "Hello, and welcome! I am here to support you as an AI therapist, drawing on a range of clinical knowledge to offer guidance. I would love to hear about what brings you here today. You can share as much or as little as feels comfortable for you, and we will go at your own pace",
+    "Hello and welcome I am here to support you as an AI therapist drawing on a range of clinical knowledge to offer guidance I would love to hear about what brings you here today You can share as much or as little as feels comfortable for you and we will go at your own pace",
   ];
 
   useEffect(() => {
@@ -411,36 +411,38 @@ const Chat: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200 z-50">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-            className="text-black flex-1 md:text-[20px] text-[15px] bg-gray-200 rounded-full md:px-4 px-2 md:py-2 focus:outline-none"
-            placeholder="Type your message..."
-          />
-          <button
-            onClick={() => handleSendMessage()}
-            disabled={responseLoading || !sessionStarted}
-            className="bg-black text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <FaArrowUp size={20} />
-          </button>
-          <button
-            onClick={isRecording ? handleStopRecording : handleStartRecording}
-            disabled={responseLoading || !sessionStarted}
-            className={`${
-              isRecording
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
-            } text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          >
-            {isRecording ? <StopCircle size={20} /> : <Mic size={20} />}
-          </button>
+      {sessionStarted && selectedAvatarId && (
+        <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200 z-50">
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              className="text-black flex-1 md:text-[20px] text-[15px] bg-gray-200 rounded-full md:px-4 px-2 md:py-2 focus:outline-none"
+              placeholder="Type your message..."
+            />
+            <button
+              onClick={() => handleSendMessage()}
+              disabled={responseLoading || !sessionStarted}
+              className="bg-black text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <FaArrowUp size={20} />
+            </button>
+            <button
+              onClick={isRecording ? handleStopRecording : handleStartRecording}
+              disabled={responseLoading || !sessionStarted}
+              className={`${
+                isRecording
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              {isRecording ? <StopCircle size={20} /> : <Mic size={20} />}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
