@@ -343,7 +343,7 @@ const Chat: React.FC = () => {
         )}
       </div>
       <div className="flex-1 flex items-center justify-center z-50">
-        <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-screen">
+        <div className="w-[100%] mx-auto my-2 max-h-screen">
           {!stream ? (
             <div className="flex flex-col justify-center items-center h-full">
               <AvatarSelectionForm onSelectAvatar={setSelectedAvatarId} />
