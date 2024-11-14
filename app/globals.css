@@ -68,6 +68,20 @@ body {
   }
 }
 
+select {
+  background-color: transparent;
+  color: white;
+}
+
+select option {
+  background-color: #1f2937;
+  color: white;
+}
+
+select option:focus {
+  background-color: #374151;
+}
+
 @layer base {
   * {
     @apply border-border;

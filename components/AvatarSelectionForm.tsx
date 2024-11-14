@@ -77,16 +77,16 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
   ]);
 
   return (
-    <div className="w-full max-w-md mx-auto mb-6 p-6 bg-white rounded-lg shadow-md">
+    <div className="w-full max-w-md mx-auto mb-6 p-6 bg-none rounded-lg shadow-2xl border-2 border-gray-400">
       <div className="space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-white">
             Select Ethnicity
           </label>
           <select
             value={selectedEthnicity}
             onChange={(e) => setSelectedEthnicity(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
           >
             <option value="">Select Ethnicity</option>
             {ethnicities.map((ethnicity) => (
@@ -98,7 +98,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-white">
             Select Gender
           </label>
           <select
@@ -116,7 +116,7 @@ const AvatarSelectionForm: React.FC<AvatarSelectionFormProps> = ({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-white">
             Select Age
           </label>
           <select

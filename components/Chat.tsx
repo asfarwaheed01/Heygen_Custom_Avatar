@@ -76,7 +76,7 @@ const Chat: React.FC = () => {
   }
 
   async function startAvatarSession() {
-    if (!selectedAvatarId) return; // Ensure avatar is selected
+    if (!selectedAvatarId) return;
     setIsLoadingSession(true);
 
     const newToken = await fetchAccessToken();
@@ -116,23 +116,7 @@ const Chat: React.FC = () => {
   }
 
   const handleAudioUpload = async (blob: Blob) => {
-    // const formData = new FormData();
-    // formData.append("file", blob, "recording.wav");
-
     try {
-      // const response = await axios.post(
-      //   "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/upload_audio",
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-
-      // const transcript = response.data.transcript;
-      // console.log("Transcript:", transcript);
-      // handleSendMessage(transcript);
       handleSendWavFile(blob);
     } catch (error) {
       console.error("Error uploading audio:", error);
@@ -326,29 +310,39 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-auto min-h-screen bg-gray-100">
-      <div className="md:flex items-center bg-gray-100 px-4 mt-2">
+    <div
+      className="flex flex-col h-auto min-h-screen bg-gray-100"
+      style={{
+        backgroundImage: `url('https://meomind.com/wp-content/uploads/2024/08/meomind-get-started.jpg')`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="absolute inset-0 bg-black opacity-40"></div>
+      <div className="md:flex items-center bg-none px-4 mt-2 z-50">
         <div className="mb-4 md:absolute left-4 top-3 cursor-pointer group z-20">
           <Image
             width={150}
             height={150}
-            src="/assets/avatar_logo.png"
+            src="https://meomind.com/wp-content/uploads/2024/06/meomind-logo-large-03.png"
             alt="avatar_logo"
-            className="rounded-full border-4 border-blue-500 shadow-lg group-hover:shadow-2xl"
+            loading="eager"
+            className="rounded-full text-white border-4 border-white shadow-lg group-hover:shadow-2xl"
           />
         </div>
         {!sessionStarted && (
           <div className="flex-1 justify-center">
-            <h1 className="text-center text-gray-800 md:text-3xl font-extrabold">
-              AI Therapist <span className="text-blue-500">(Beta)</span>
+            <h1 className="text-center text-white md:text-3xl font-extrabold">
+              AI Therapist <span className="text-gray-700">(Beta)</span>
             </h1>
-            <p className="text-center text-gray-600 text-sm mt-2">
+            <p className="text-center text-white text-sm mt-2">
               Your personalized virtual therapist
             </p>
           </div>
         )}
       </div>
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center z-50">
         <div className="md:w-[100%] w-[90%] mx-auto my-2 max-h-screen">
           {!stream ? (
             <div className="flex flex-col justify-center items-center h-full">
