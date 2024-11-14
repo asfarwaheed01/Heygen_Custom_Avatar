@@ -34,7 +34,7 @@ const Chat: React.FC = () => {
   const canStartSession = !!selectedAvatarId;
 
   const introLines = [
-    "Hello, and welcome! I’m here to support you as an AI therapist, drawing on a range of clinical knowledge to offer guidance. I’d love to hear about what brings you here today. You can share as much or as little as feels comfortable for you, and we’ll go at your own pace",
+    "Hello, and welcome! I am here to support you as an AI therapist, drawing on a range of clinical knowledge to offer guidance. I would love to hear about what brings you here today. You can share as much or as little as feels comfortable for you, and we will go at your own pace",
   ];
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const Chat: React.FC = () => {
       setSessionStarted(true);
       if (!introPlayedRef.current) {
         introPlayedRef.current = true;
-        setTimeout(speakIntroLines, 2000);
+        setTimeout(speakIntroLines, 1000);
       }
     } catch (error) {
       console.error("Error starting avatar session:", error);
