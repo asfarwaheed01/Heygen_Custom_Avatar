@@ -98,7 +98,7 @@ const Chat: React.FC = () => {
       setSessionStarted(true);
       if (!introPlayedRef.current) {
         introPlayedRef.current = true;
-        setTimeout(speakIntroLines, 3000);
+        setTimeout(speakIntroLines, 2000);
       }
     } catch (error) {
       console.error("Error starting avatar session:", error);
@@ -402,7 +402,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       {sessionStarted && selectedAvatarId && (
-        <div className="flex justify-end md:w-[70%] mx-auto mb-2 z-10">
+        <div className="flex justify-end md:w-[70%] mx-auto mb-2 z-50">
           <button
             className="bg-gradient-to-tr lg:w-[15%]  from-indigo-500 to-indigo-300  text-white rounded-lg shadow-md px-2 py-2"
             onClick={endSession}
@@ -411,7 +411,7 @@ const Chat: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200 z-10">
+      <div className="md:w-[70%] mx-auto p-2 shadow-lg mb-4 rounded-full bg-gray-200 z-50">
         <div className="flex items-center space-x-2">
           <input
             type="text"
