@@ -91,8 +91,8 @@ const Chat: React.FC = () => {
         avatarName: selectedAvatarId,
         quality: AvatarQuality.High,
         voice: {
-          rate: 1.5,
-          emotion: VoiceEmotion.EXCITED,
+          rate: 0.7,
+          emotion: VoiceEmotion.FRIENDLY,
         },
       });
       setSessionStarted(true);
