@@ -134,7 +134,7 @@ const Chat: React.FC = () => {
       };
 
       const response = await axios.post(
-        "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/generate_response",
+        "https://nm9phd2gkd.us-east-1.awsapprunner.com/api/generate_response",
         payload,
         {
           headers: {
@@ -218,7 +218,7 @@ const Chat: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://iegp3k7uyz.us-east-1.awsapprunner.com/api/generate_audio_response",
+        "https://nm9phd2gkd.us-east-1.awsapprunner.com/api/generate_audio_response",
         file,
         {
           headers: {
